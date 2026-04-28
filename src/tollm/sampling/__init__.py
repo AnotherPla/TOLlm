@@ -1,1 +1,5 @@
-"""温度、top-p/k、重复惩罚、并行采样。"""
+"""采样：解码参数、logits 后处理与相关工具。"""
+
+from tollm.sampling.params import SamplingParams
+
+__all__ = ["SamplingParams"]

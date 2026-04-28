@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import Any
-from dataclasses import dataclass, field
-from tollm.sampling_params import SamplingParams
+
+from tollm.sampling import SamplingParams
+
+
 class LLM_Engine:
     """推理入口桩：接好 `model_path` 后接 loader 与执行循环。"""
 
