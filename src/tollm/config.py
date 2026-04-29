@@ -1,21 +1,28 @@
-"""模型与运行时配置（数据类/字典），与 nano-vllm 的 ModelConfig 思路一致，按需扩展。"""
+"""model config"""
 
-from __future__ import annotations
+import os
+from transformers import AutoConfig
+from dataclasses import dataclass
 
-from dataclasses import dataclass, field
-from typing import Any, Optional
 
-
-@dataclass
+@dataclass(slots=True)
 class ModelConfig:
-    """推理侧只关心「已解析」后的形状与超参，权重路径由 Engine 组合输入。"""
-
-    hidden_size: int = 4096
-    num_hidden_layers: int = 32
-    num_attention_heads: int = 32
-    num_key_value_heads: Optional[int] = None
-    max_position_embeddings: int = 4096
-    vocab_size: int = 32000
-    rms_norm_eps: float = 1e-5
-    torch_dtype: str = "bfloat16"
-    extra: dict[str, Any] = field(default_factory=dict)
+    """only care about the shape and hyperparameters after parsing, the weight path is combined by the Engine"""
+    model_path: str
+    max_num_batched_tokens: int = 16384
+    max_num_seqs: int = 512
+    max_model_len: int = 4096
+    gpu_memory_utilization: float = 0.9
+    tensor_parallel_size: int = 1
+    enforce_eager: bool = False
+    hf_config:AutoConfig | None = None
+    eos: int = -1
+    kvcache_block_size: int = 256
+    num_kvcache_blocks: int = -1
+    
+    def __post_init__(self):
+        assert os.path.exists(self.model_path), f"Model path {self.model_path} does not exist"
+        assert self.kvcache_block_size % 256 == 0, "kvcache_block_size must be divisible by 256"
+        assert 1<=self.tensor_parallel_size<=8, "tensor_parallel_size must be between 1 and 8"
+        self.hf_config = AutoConfig.from_pretrained(self.model_path)
+        self.max_model_len = min(self.max_model_len, self.hf_config.max_position_embeddings)
