@@ -19,6 +19,7 @@ class LLM_Engine:
         config_fields = {field.name for field in fields(ModelConfig)}
         config_kwargs = {k: v for k, v in kwargs.items() if k in config_fields}
         config = ModelConfig(model_path, **config_kwargs)
+        Sequence
         self._model_path = model_path
         self._kwargs = kwargs
 
