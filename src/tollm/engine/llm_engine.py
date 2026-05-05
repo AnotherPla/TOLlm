@@ -51,7 +51,7 @@ class LLM_Engine:
         num_tokens = sum(seq.num_scheduled_tokens for seq in seqs) if is_prefill else -len(seqs)
         token_ids = self.model_runner.call("run",seqs,is_prefill)
         self.scheduler.postprocess(seqs,token_ids,is_prefill)
-        output = [(seq.seq_id, seq.completion_token_ids) for seq in seqs if seq.is_finished]
+        outputs = [(seq.seq_id, seq.completion_token_ids) for seq in seqs if seq.is_finished]
         return outputs,num_tokens
 
 

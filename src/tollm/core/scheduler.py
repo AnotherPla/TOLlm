@@ -8,7 +8,7 @@ from tollm.core.block_manager import BlockManager
 
 class Scheduler:
 
-    def __init__(self, config: Config):
+    def __init__(self, config: ModelConfig):
         self.max_num_seqs = config.max_num_seqs
         self.max_num_batched_tokens = config.max_num_batched_tokens
         self.eos = config.eos

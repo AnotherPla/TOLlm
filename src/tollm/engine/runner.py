@@ -73,7 +73,7 @@ class Runner:
     def read_shm(self):
         assert self.world_size > 1 and self.rank > 0
         self.event.wait()
-        n:=int.from_bytes(self.shm.buf[:4], "little")
+        n = int.from_bytes(self.shm.buf[:4], "little")
         method_name,*args = pickle.loads(self.shm.buf[4:n+4])
         self.event.clear()
         return method_name, args
