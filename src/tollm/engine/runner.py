@@ -77,6 +77,21 @@ class Runner:
         method_name,*args = pickle.loads(self.shm.buf[4:n+4])
         self.event.clear()
         return method_name, args
+    
+    def write_shm(self, method_name, *args):
+        assert self.world_size > 1 and self.rank == 0
+        data = pickle.dumps([method_name, *args])
+        n = len(data)
+        self.shm.buf[0:4] = n.to_bytes(4, "little")
+        self.shm.buf[4:n+4] = data
+        for event in self.event:
+            event.set()
+            
+    def call(self, method_name, *args):
+        if self.world_size > 1 and self.rank == 0:
+            self.write_shm(method_name, *args)
+        method = getattr(self, method_name, None)
+        return method(*args)
 
     def warmup_model(self):
         torch.cuda.empty_cache()

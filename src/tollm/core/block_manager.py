@@ -8,7 +8,7 @@ from tollm.core.sequence import Sequence
 
 
 class BlockManager:
-    
+
     def __init__(self, num_blocks: int, block_size: int):
         self.block_size = block_size
         self.blocks: list[Block] = [Block(i) for i in range(num_blocks)]
@@ -19,8 +19,8 @@ class BlockManager:
     @classmethod
     def compute_hash(cls, token_ids: list[int], prefix: int = -1):
         h = xxhash.xxh64()
-        if prefix!=-1:
-            h.update(prefix.to_bytes(8, 'little'))
+        if prefix != -1:
+            h.update(prefix.to_bytes(8, "little"))
         h.update(np.array(token_ids).tobytes())
         return h.intdigest()
 
