@@ -19,9 +19,27 @@ class LLM_Engine:
         config_fields = {field.name for field in fields(ModelConfig)}
         config_kwargs = {k: v for k, v in kwargs.items() if k in config_fields}
         config = ModelConfig(model_path, **config_kwargs)
-        Sequence
-        self._model_path = model_path
-        self._kwargs = kwargs
+        Sequence.block_size = config.kvcache_block_size
+        self.ps = []
+        self.events = []
+        ctx = mp.get_context('spawn')
+        for i in range(1,config.tensor_parallel_size):
+            event = ctx.Event()
+            process = ctx.Process(target=Runner, args=(config,i,event))
+            process.start()
+            self.ps.append(process)
+            self.events.append(event)
+        self.model_runner = Runner(config,0,self.events)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+        config.eos = self.tokenizer.eos_token_id
+        self.scheduler = Scheduler(config)
+        atexit.register(self.exit)
+    
+    def exit(self):
+        self.model_runner.call("exit")
+        del self.model_runner
+        for p in self.ps:
+            p.join()
 
     def generate(self, prompts: list[str], params: SamplingParams) -> list[dict[str, Any]]:
         del params
