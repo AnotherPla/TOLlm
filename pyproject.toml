@@ -9,7 +9,6 @@ authors = [{ name = "Jianxin Chen" }]
 description = "轻量级大模型推理引擎（基于 nano-vllm 思路）"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
-license = "MIT"
 license = { file = "LICENSE" }
 dependencies = [
   "torch>=2.4.0",
@@ -23,5 +22,5 @@ dependencies = [
 Homepage="https://github.com/AnotherPla/TOLlm"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 include = ["tollm*"]
