@@ -21,7 +21,7 @@ class ModelConfig:
     num_kvcache_blocks: int = -1
     
     def __post_init__(self):
-        assert os.path.exists(self.model_path), f"Model path {self.model_path} does not exist"
+        assert os.path.isdir(self.model_path), f"Model path {self.model_path} is not a directory"
         assert self.kvcache_block_size % 256 == 0, "kvcache_block_size must be divisible by 256"
         assert 1<=self.tensor_parallel_size<=8, "tensor_parallel_size must be between 1 and 8"
         self.hf_config = AutoConfig.from_pretrained(self.model_path)

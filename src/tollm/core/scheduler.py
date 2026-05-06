@@ -31,7 +31,7 @@ class Scheduler:
         while self.waiting and len(scheduled_seqs) < self.max_num_seqs:
             seq = self.waiting[0]
             remaining_tokens = self.max_num_batched_tokens - num_batched_tokens
-            if remaining_tokens < 0:
+            if remaining_tokens <= 0:
                 break
             if not seq.block_table:
                 num_cached_blocks = self.block_manager.can_allocate(seq)
@@ -65,12 +65,12 @@ class Scheduler:
                     self.preempt(seq)
                     break
             else:
-                seq.num_scheduled_tokens += 1
+                seq.num_scheduled_tokens = 1
                 seq.is_prefill = False
                 self.block_manager.may_append(seq)
                 scheduled_seqs.append(seq)
         assert scheduled_seqs
-        self.running.extendleft(scheduled_seqs)
+        self.running.extendleft(reversed(scheduled_seqs))
         return scheduled_seqs, False
 
 

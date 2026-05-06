@@ -29,7 +29,7 @@ class LLM_Engine:
             self.ps.append(process)
             self.events.append(event)
         self.model_runner = Runner(config,0,self.events)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
         config.eos = self.tokenizer.eos_token_id
         self.scheduler = Scheduler(config)
         atexit.register(self.exit)
@@ -55,10 +55,15 @@ class LLM_Engine:
         return outputs,num_tokens
 
 
-    def is_finished(self) -> bool:
+    def is_finished(self):
         return self.scheduler.is_finished()
 
-    def generate(self, prompts: list[str] | list[list[int]], sampling_params: SamplingParams | list[SamplingParams],use_tqdm: bool = True) -> list[str]:
+    def generate(
+        self, 
+        prompts: list[str] | list[list[int]], 
+        sampling_params: SamplingParams | list[SamplingParams],
+        use_tqdm: bool = True
+        ):
         pbar = tqdm(total=len(prompts), desc="Generating", dynamic_ncols=True, disable=not use_tqdm)
         if not isinstance(sampling_params, list):
             sampling_params = [sampling_params] * len(prompts)

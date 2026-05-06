@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "tollm"
 version = "0.1.0"
 authors = [{ name = "Jianxin Chen" }]
-description = "轻量级大模型推理引擎（基于 nano-vllm 思路）"
+description = "a lightweight inference engine for large language models"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 license = { file = "LICENSE" }
