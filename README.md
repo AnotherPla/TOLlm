@@ -1,9 +1,6 @@
 # TOLlm
 
-TOLlm is a lightweight large language model inference engine. The project is
-designed as a compact learning-oriented implementation of common LLM serving
-ideas, including continuous batching, paged KV cache management, tensor
-parallel.
+TOLlm is a lightweight large language model inference engine. 
 
 ## Features
 
@@ -11,13 +8,9 @@ parallel.
   paths.
 - Paged KV cache block management with block tables, slot mapping, reference
   counting, and prefix cache hashing.
-- Tensor parallel linear, embedding, and LM head layers based on
-  `torch.distributed`.
 - FlashAttention integration for variable-length prefill and KV-cache decode.
 - CUDA Graph capture for small-batch decode replay when eager execution is not
   enforced.
-- Temperature sampling and simple batched generation API.
-- Minimal example and benchmark scripts for local experiments.
 
 ## Requirements
 
@@ -90,28 +83,3 @@ python benchmarks/minibench.py
 The script creates random token prompts and measures decode throughput. Update
 the model path and request sizes in the script before running it on your own
 hardware.
-
-## Current Limitations
-
-- Qwen3 is the main supported model family. LLaMA support is currently a
-  placeholder.
-- Greedy, top-k, top-p, repetition penalty, and stop strings are not implemented
-  yet.
-- The HTTP server module is only a stub.
-- Benchmarking is minimal and should be expanded for fair comparisons with
-  Hugging Face Transformers or vLLM.
-- Test coverage is still limited.
-
-## Roadmap
-
-- Add more sampling strategies such as top-k, top-p, and repetition penalty.
-- Expand benchmark scripts and report throughput/latency on real workloads.
-- Add unit tests for scheduler, block manager, sampler, and tensor parallel
-  layers.
-- Improve server API and expose an OpenAI-compatible generation endpoint.
-- Add support for more model architectures.
-- Refine paged attention and prefix cache behavior.
-
-## License
-
-This project is licensed under the terms in `LICENSE`.
