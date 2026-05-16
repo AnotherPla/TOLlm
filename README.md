@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/assets/TOLlm.png" alt="TOLlm logo" width="160" />
+  <img src="/assets/TOLlm.png" alt="TOLlm logo" width="400" />
 </p>
 
 # TOLlm
