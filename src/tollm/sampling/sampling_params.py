@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 
+# TODO: TOP-K, TOP-P, REPETITION PENALTY, STOP STRINGS, etc.
 @dataclass(slots=True)
 class SamplingParams:
     temperature: float = 1.0
