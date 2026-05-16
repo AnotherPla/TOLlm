@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="/assets/TOLlm.png" alt="TOLlm logo" width="160" />
+</p>
+
 # TOLlm
 
 TOLlm is a lightweight large language model inference engine. 
